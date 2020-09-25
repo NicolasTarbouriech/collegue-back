@@ -1,10 +1,14 @@
 package dev.paie.controller;
 
 import java.util.List;
+import java.util.Optional;
 
 import javax.validation.Valid;
 
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,6 +20,7 @@ import dev.paie.dto.CreerCollegueResponseDto;
 import dev.paie.entity.Collegue;
 import dev.paie.service.CollegueService;
 
+@CrossOrigin
 @RestController
 @RequestMapping("collegues")
 public class CollegueCtrl {
@@ -32,6 +37,19 @@ public class CollegueCtrl {
 	public List<String> rechercherMatriculesParNom(@RequestParam String nom) {
 		return this.collegueService.rechercherParNom(nom);
 	}
+
+	// GET /collegues/????
+		@GetMapping("{matricule}")
+		public ResponseEntity<?> rechercherParMatricule(@PathVariable String matricule) {
+			Optional<Collegue> optCol = this.collegueService.rechercherParMat(matricule);
+			
+			if(optCol.isPresent()) {
+				return ResponseEntity.ok(optCol.get());
+			} else {
+				return ResponseEntity.notFound().build();
+			}
+			
+		}
 
 	// POST /collegues
 	@PostMapping

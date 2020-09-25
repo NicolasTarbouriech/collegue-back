@@ -1,6 +1,7 @@
 package dev.paie.service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 import org.springframework.stereotype.Service;
@@ -11,20 +12,17 @@ import dev.paie.repository.CollegueRepo;
 
 @Service
 public class CollegueService {
-	
+
 	private CollegueRepo collegueRepo;
 
-	
 	public CollegueService(CollegueRepo collegueRepo) {
 		super();
 		this.collegueRepo = collegueRepo;
 	}
 
-
 	public List<String> rechercherParNom(String nom) {
 		return collegueRepo.findByNom(nom);
 	}
-
 
 	public Collegue creerCollegue(CreerCollegueRequestDto dto) {
 
@@ -33,18 +31,21 @@ public class CollegueService {
 		collegue.setPrenom(dto.getPrenoms());
 		collegue.setDateDeNaissance(dto.getDateDeNaissance());
 		collegue.setPhotoUrl(dto.getPhotoUrl());
-		
+
 		// logique métier (génération du matricule)
 		collegue.setMatricule(UUID.randomUUID().toString());
-		collegue.setEmail(dto.getPrenoms()+"."+dto.getNom()+ "@dev.fr");
-		
+		collegue.setEmail(dto.getPrenoms() + "." + dto.getNom() + "@dev.fr");
+
 		// => envoyer un email aux RHs
 		// ...
-		
+
 		return this.collegueRepo.save(collegue);// insert into collegue
-		
-		
-		
+
+	}
+
+	public Optional<Collegue> rechercherParMat(String matricule) {
+
+		return this.collegueRepo.findByMatricule(matricule);
 	}
 
 }
