@@ -1,8 +1,11 @@
 package dev.paie.service;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+
+import javax.transaction.Transactional;
 
 import org.springframework.stereotype.Service;
 
@@ -47,5 +50,16 @@ public class CollegueService {
 
 		return this.collegueRepo.findByMatricule(matricule);
 	}
+	
+	
 
+	// galerie :
+	public List<Collegue> ListAllCollegue() {
+		return collegueRepo.findAll();
+
+	}
+	
+	public void deleteCollegue(String matricule) {
+		collegueRepo.deleteCollegueParMatricule(matricule);
+	}
 }

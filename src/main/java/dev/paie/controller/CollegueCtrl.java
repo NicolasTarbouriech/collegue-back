@@ -2,11 +2,13 @@ package dev.paie.controller;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import javax.validation.Valid;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -37,6 +39,14 @@ public class CollegueCtrl {
 	public List<String> rechercherMatriculesParNom(@RequestParam String nom) {
 		return this.collegueService.rechercherParNom(nom);
 	}
+	
+
+	@GetMapping("photos")
+	public List<CollegueGalerie> findAllGalerie() {
+		return collegueService.ListAllCollegue().stream().map(c -> new CollegueGalerie(c.getMatricule(), c.getPhotoUrl()))
+				.collect(Collectors.toList());
+	}
+
 
 	// GET /collegues/????
 		@GetMapping("{matricule}")
@@ -57,6 +67,12 @@ public class CollegueCtrl {
 		Collegue collegueCree = this.collegueService.creerCollegue(dto);
 
 		return new CreerCollegueResponseDto(collegueCree.getMatricule(), collegueCree.getEmail());
+	}
+	
+	// Supprimer un collegue par le matricule
+	@DeleteMapping
+	public void deleteCollegueParMatricule(@RequestParam String matricule) {
+		collegueService.deleteCollegue(matricule);
 	}
 
 }

@@ -15,5 +15,8 @@ public interface CollegueRepo extends JpaRepository<Collegue, Integer>{
 	List<String> findByNom(@Param("nom") String nom);
 
 	Optional<Collegue> findByMatricule(String matricule);
+	
+	@Query("delete from Collegue c where c.matricule=:matricule")
+	void deleteCollegueParMatricule (@Param("matricule")String matricule);
 }
 
